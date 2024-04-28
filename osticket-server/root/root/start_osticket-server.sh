@@ -22,7 +22,6 @@ fi
 # Automate installation
 php /var/www/osticket/upload/setup/install.php
 rm -r /var/www/osticket/upload/setup
-chmod 644 /var/www/osticket/upload/include/ost-config.php
 
 # Launch Apache2 as Apache user
 /usr/sbin/httpd -D FOREGROUND

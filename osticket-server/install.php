@@ -45,8 +45,8 @@ $vars = array(
   'smtp_user'       => getenv("SMTP_USER"),
   'smtp_password'       => getenv("SMTP_PASSWORD"),
 
-  'siri'     => getenv("INSTALL_SECRET"),
-  'config'   => getenv("INSTALL_CONFIG") ?: '/var/www/osticket/upload/include/ost-config.php'
+  'siri'            => getenv("INSTALL_SECRET"),
+  'config'          => '/config/ost-config.php'
 );
 
 //Script settings
@@ -79,7 +79,7 @@ require_once INC_DIR.'class.installer.php';
 
 
 /************************* Mail Configuration *******************************************/
-define('MAIL_CONFIG_FILE','/etc/msmtp');
+define('MAIL_CONFIG_FILE', '/etc/msmtp');
 
 echo "Configuring mail settings\n";
 if (!$mailConfig = file_get_contents(MAIL_CONFIG_FILE)) {
@@ -96,16 +96,55 @@ $mailConfig = str_replace('%SMTP_TLS_CERTS%', $vars['smtp_tls_certs'], $mailConf
 $mailConfig = str_replace('%SMTP_TLS%', boolToOnOff(convertStrToBool('smtp_tls',true)), $mailConfig);
 $mailConfig = str_replace('%SMTP_AUTH%', boolToOnOff($vars['smtp_user'] != ''), $mailConfig);
 
-if (!file_put_contents(MAIL_CONFIG_FILE, $mailConfig) || !chown(MAIL_CONFIG_FILE,'apache')
-   || !chgrp(MAIL_CONFIG_FILE,'apache') || !chmod(MAIL_CONFIG_FILE,0600)) {
-   err("Failed to write mail configuration file");
+if (!file_put_contents(MAIL_CONFIG_FILE, $mailConfig) || !chown(MAIL_CONFIG_FILE, 'apache')
+  || !chgrp(MAIL_CONFIG_FILE, 'apache') || !chmod(MAIL_CONFIG_FILE, 0600)) {
+  err("Failed to write mail configuration file");
 }
 
 /************************* OSTicket Installation *******************************************/
 
+//Create secret if not set by env var and not previously stored
+DEFINE('SECRET_FILE', '/config/secret.txt');
+if (!$vars['siri']) {
+  if (file_exists(SECRET_FILE)) {
+    echo "Loading installation secret\n";
+    $vars['siri'] = file_get_contents(SECRET_FILE);
+  } else {
+    echo "Generating new installation secret and saving\n";
+    //Note that this randomly generated value is not intended to secure production sites!
+    $vars['siri'] = substr(str_shuffle("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890_="), 0, 32);
+    if (!file_put_contents(SECRET_FILE, $vars['siri']) || !chmod(SECRET_FILE, 0600)) {
+      err("Failed to write secret file");
+    }
+  }
+} else {
+  echo "Using installation secret from INSTALL_SECRET environmental variable\n";
+  if (!file_put_contents(SECRET_FILE, $vars['siri']) || !chmod(SECRET_FILE, 0600)) {
+    err("Failed to write secret file");
+  }
+}
+
 //Create installer class
-define('OSTICKET_CONFIGFILE','/config/ost-config.php');
-$installer = new Installer(OSTICKET_CONFIGFILE); //Installer instance.
+$installer = new Installer($vars['config']); //Installer instance.
+
+//Always rewrite config file in case MySQL details changed (e.g. ip address)
+DEFINE('CONFIG_TEMPLATE_FILE', '/var/www/osticket/upload/include/ost-sampleconfig.php');
+echo "Updating configuration file\n";
+if (!$configFile = file_get_contents(CONFIG_TEMPLATE_FILE)) {
+  err("Failed to load configuration file: " . CONFIG_TEMPLATE_FILE);
+};
+$configFile= str_replace("define('OSTINSTALLED',FALSE);","define('OSTINSTALLED',TRUE);",$configFile);
+$configFile= str_replace('%ADMIN-EMAIL',$vars['admin_email'],$configFile);
+$configFile= str_replace('%CONFIG-DBHOST',$vars['dbhost'],$configFile);
+$configFile= str_replace('%CONFIG-DBNAME',$vars['dbname'],$configFile);
+$configFile= str_replace('%CONFIG-DBUSER',$vars['dbuser'],$configFile);
+$configFile= str_replace('%CONFIG-DBPASS',$vars['dbpass'],$configFile);
+$configFile= str_replace('%CONFIG-PREFIX',$vars['prefix'],$configFile);
+$configFile= str_replace('%CONFIG-SIRI',$vars['siri'],$configFile);
+
+if (!file_put_contents($vars['config'], $configFile) || !chmod($vars['config'], 0644)) {
+  err("Failed to write configuration file");
+}
 
 //Determine if using linked container
 $linked = (boolean)getenv("MYSQL_ENV_MYSQL_PASSWORD");
@@ -156,40 +195,6 @@ elseif(!db_select_database($vars['dbname']) && !db_create_database($vars['dbname
        $db_installed = true;
        echo "Database already installed\n";
    }
-}
-
-//Create secret if not set by env var and not previously stored
-DEFINE('SECRET_FILE','/config/secret.txt');
-if (!$vars['siri']) {
-  if (file_exists(SECRET_FILE)) {
-    echo "Loading installation secret\n";
-    $vars['siri'] = file_get_contents(SECRET_FILE);
-  } else {
-    echo "Generating new installation secret and saving\n";
-    //Note that this randomly generated value is not intended to secure production sites!
-    $vars['siri'] = substr(str_shuffle("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890_="), 0, 32);
-    file_put_contents(SECRET_FILE, $vars['siri']);
-  }
-} else {
-  echo "Using installation secret from INSTALL_SECRET environmental variable\n";
-}
-
-//Always rewrite config file in case MySQL details changed (e.g. ip address)
-echo "Updating configuration file\n";
-if (!$configFile = file_get_contents($vars['config'])) {
-  err("Failed to load configuration file: {$vars['config']}");
-};
-$configFile= str_replace("define('OSTINSTALLED',FALSE);","define('OSTINSTALLED',TRUE);",$configFile);
-$configFile= str_replace('%ADMIN-EMAIL',$vars['admin_email'],$configFile);
-$configFile= str_replace('%CONFIG-DBHOST',$vars['dbhost'],$configFile);
-$configFile= str_replace('%CONFIG-DBNAME',$vars['dbname'],$configFile);
-$configFile= str_replace('%CONFIG-DBUSER',$vars['dbuser'],$configFile);
-$configFile= str_replace('%CONFIG-DBPASS',$vars['dbpass'],$configFile);
-$configFile= str_replace('%CONFIG-PREFIX',$vars['prefix'],$configFile);
-$configFile= str_replace('%CONFIG-SIRI',$vars['siri'],$configFile);
-
-if (!file_put_contents($installer->getConfigFile(), $configFile)) {
-   err("Failed to write configuration file");
 }
 
 //Perform database installation if required

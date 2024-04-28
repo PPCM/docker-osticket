@@ -52,7 +52,6 @@ RUN --mount=type=bind,source=utils/verify-plugin.php,target=/tmp/verify-plugin.p
 	wget https://github.com/osTicket/osTicket/releases/download/${OSTICKET_VERSION}/osTicket-${OSTICKET_VERSION}.zip; \
   unzip osTicket-${OSTICKET_VERSION}.zip -d /var/www/osticket; \
 	rm osTicket-${OSTICKET_VERSION}.zip; \
-	mv /var/www/osticket/upload/include/ost-sampleconfig.php /var/www/osticket/upload/include/ost-config.php; \
 	cd /var/www/osticket/upload; \
 	# Installation of language packs
 	for lang in bg bn bs ca cs da de el es_AR es_ES es_MX et eu fa fi fr gl he hi hr hu id is it \
@@ -80,14 +79,13 @@ RUN --mount=type=bind,source=utils/verify-plugin.php,target=/tmp/verify-plugin.p
         # (e.g. due to a checksum mismatch)
         php -r "new Phar(\"${phar}\");"; \
     done; \
+	# Create a link to the config file
+	ln -s /config/ost-config.php /var/www/osticket/upload/include/ost-config.php; \
 	chown -R apache:apache /var/www/osticket; \
 	mkdir /config; \
 	chown apache:apache /config; \
 	mkdir /data; \
-	chown apache:apache /data; \
-	# Copy osTicket config file
-	mv /var/www/osticket/upload/include/ost-config.php /config; \
-	ln -s /config/ost-config.php /var/www/osticket/upload/include/ost-config.php
+	chown apache:apache /data;
 
 # osTicket installation script
 COPY root /

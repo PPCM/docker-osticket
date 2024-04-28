@@ -12,11 +12,15 @@ sed -i "s|%%SCHEDULE%%|${CRON_SCHEDULE}|" /etc/crontabs/root
 
 # Waiting for the installation to be done
 echo `date` " - Waiting GLPI to be installed from ppcm/glpi-server"
-done_file='/config/secret.txt'
-while [ ! -f "$done_file" ]
+secret_file='/config/secret.txt'
+config_file='/config/ost-config.php'
+while [ ! -f "$secret_file" -o ! -f "$config_file" ]
 do
-    inotifywait -qq -t 30 -e create -e moved_to "$(dirname $done_file)"
+    inotifywait -qq -t 30 -e create -e moved_to "$(dirname $secret_file)" "$(dirname $config_file)"
 done
+
+## Sleep 60s before continue
+sleep 60s
 
 echo `date` " - Start CRON job"
 
