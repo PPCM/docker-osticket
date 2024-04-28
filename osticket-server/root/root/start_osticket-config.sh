@@ -1,5 +1,12 @@
 #!/bin/ash
 
+# Set the timezone of the OS
+if [ -z "${TZ}" ]
+then
+	TZ='UTC'
+fi
+ln -s /usr/share/zoneinfo/$TZ /etc/localtime
+
 # Modify default timezone for PHP
 sed -i "s|;date.timezone =|date.timezone=${TZ}|" /etc/php82/php.ini
 

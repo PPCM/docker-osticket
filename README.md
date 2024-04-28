@@ -38,7 +38,7 @@ Starting a `osTicket` instance is simple
 ```console
 $ docker network create some-network 
 $ docker run -d --name some-mariadb -p 3306:3306 --network some-network -e MARIADB_USER=osticket-user -e MARIADB_PASSWORD=osticket-password -e MARIADB_RANDOM_ROOT_PASSWORD=1 -e MARIADB_DATABASE=osticket -v mysql-dir:/var/lib/mysql mariadb:latest
-$ docker run -d --name some-osticket -p 8089:80 --network some-network -e MYSQL_HOST=some-mariadb -e MYSQL_PORT=3306 -e MYSQL_USER=osticket-user -e MYSQL_PASSWORD=osticket-password -e MYSQL_DATABASE=osticket -e LANG=fr_FR -e TZ="Europe/Paris" -v config:/config -v data:/data ppcm/osticket-server:latest
+$ docker run -d --name some-osticket-server -p 8089:80 --network some-network -e MYSQL_HOST=some-mariadb -e MYSQL_PORT=3306 -e MYSQL_USER=osticket-user -e MYSQL_PASSWORD=osticket-password -e MYSQL_DATABASE=osticket -e LANG=fr_FR -e TZ="Europe/Paris" -v config:/config -v data:/data ppcm/osticket-server:latest
 $ docker run -d --name some-osticket-cron --network some-network -e CRON_SCHEDULE="*/2 * * * *" -e TZ="Europe/Paris" -v config:/config -v data:/data ppcm/osticket-cron:latest
 ```
 ### Login to osTicket

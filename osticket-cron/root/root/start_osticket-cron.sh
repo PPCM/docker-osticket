@@ -16,7 +16,7 @@ secret_file='/config/secret.txt'
 config_file='/config/ost-config.php'
 while [ ! -f "$secret_file" -o ! -f "$config_file" ]
 do
-    inotifywait -qq -t 30 -e create -e moved_to "$(dirname $secret_file)" "$(dirname $config_file)"
+    inotifywait -qq -e create -e moved_to "$(dirname $secret_file)" "$(dirname $config_file)"
 done
 
 ## Sleep 60s before continue

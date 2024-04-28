@@ -11,10 +11,6 @@ if [ -z "${LANG}" ]
 then
     LANG='fr_FR'
 fi
-if [ -z "${TZ}" ]
-then
-	TZ='UTC'
-fi
 
 # Config system
 ./start_osticket-config.sh
