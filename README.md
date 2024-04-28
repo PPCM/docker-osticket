@@ -50,6 +50,7 @@ By default, the following users are created
 | Administrator              | ostadmin  | ostadmin |
 
 You are invited to change as soon as possible password of this account or to remove them.
+
 ### Docker informations
 
 #### Exposed ports
