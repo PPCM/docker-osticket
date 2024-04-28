@@ -8,7 +8,7 @@
 
 - Where to file issues: https://github.com/PPCM/docker-osticket/issues
 - Supported architectures: ([more info](https://github.com/docker-library/official-images#architectures-other-than-amd64)) amd64 386 arm/v6 arm/v7 arm64
-- This image has been freely inspired from the original docker-osticket image by [devinsolutions](https://github.com/devinsolutions/docker-osticket).
+- This images were been freely inspired from the original docker-osticket image by [devinsolutions](https://github.com/devinsolutions/docker-osticket).
 
 
 ## What is osTicket
