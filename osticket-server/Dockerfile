@@ -85,7 +85,7 @@ RUN --mount=type=bind,source=utils/verify-plugin.php,target=/tmp/verify-plugin.p
 	mkdir /config; \
 	chown apache:apache /config; \
 	mkdir /data; \
-	chown apache:apache /data;
+	chown apache:apache /data
 
 # osTicket installation script
 COPY root /
