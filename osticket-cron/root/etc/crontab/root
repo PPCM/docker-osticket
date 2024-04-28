@@ -1,0 +1,1 @@
+%%SCHEDULE%% su apache -s /usr/bin/php /var/www/osticket/upload/api/cron.php  &
