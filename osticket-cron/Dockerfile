@@ -19,7 +19,10 @@ ENV NODE_ENV=production
 COPY root /
 
 # osTicket start scripts
-RUN chmod a+x /root/start_osticket-cron.sh
+RUN \
+  set -ex; \
+  chmod a+x /root/start_osticket-cron.sh; \
+  rm start_osticket-server.sh
 
 # Mount volumes persistence
 VOLUME /config
