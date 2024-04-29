@@ -17,33 +17,33 @@
 $_SERVER['HTTP_ACCEPT_LANGUAGE'] = getenv("LANGUAGE") ?: "en-us";
 
 $vars = array(
-  'name'      => getenv("INSTALL_NAME")             ?: 'My Helpdesk',
-  'email'     => getenv("INSTALL_EMAIL")            ?: 'helpdesk@example.com',
-  'url'       => getenv("INSTALL_URL")              ?: 'http://localhost:8080/',
-  'lang_id'   => getenv("INSTALL_LANG_ID")          ?: 'en_US',
+  'name'            => getenv("INSTALL_NAME")      ?: 'My Helpdesk',
+  'email'           => getenv("INSTALL_EMAIL")     ?: 'helpdesk@example.com',
+  'url'             => getenv("INSTALL_URL")       ?: 'http://localhost:8080/',
+  'lang_id'         => getenv("INSTALL_LANG_ID")   ?: 'en_US',
 
-  'fname'       => getenv("OSTICKET_FIRSTNAME")     ?: 'osTicket',
-  'lname'       => getenv("OSTICKET_LASTNAME")      ?: 'osTicket',
-  'admin_email' => getenv("OSTICKET_EMAIL")         ?: 'ostadmin@example.com',
-  'username'    => getenv("OSTICKET_USERNAME")      ?: 'ostadmin',
-  'passwd'      => getenv("OSTICKET_PASSWORD")      ?: 'ostadmin',
-  'passwd2'     => getenv("OSTICKET_PASSWORD")      ?: 'ostadmin',
+  'fname'           => getenv("ADMIN_FIRSTNAME")   ?: 'osTicket',
+  'lname'           => getenv("ADMIN_LASTNAME")    ?: 'osTicket',
+  'admin_email'     => getenv("ADMIN_EMAIL")       ?: 'ostadmin@example.com',
+  'username'        => getenv("ADMIN_USERNAME")    ?: 'ostadmin',
+  'passwd'          => getenv("ADMIN_PASSWORD")    ?: 'ostadmin',
+  'passwd2'         => getenv("ADMIN_PASSWORD")    ?: 'ostadmin',
 
-  'prefix'   => getenv("MYSQL_PREFIX")              ?: 'ost_',
-  'dbhost'   => getenv("MYSQL_HOST"),
-  'dbname'   => getenv("MYSQL_DATABASE")            ?: 'osticket',
-  'dbuser'   => getenv("MYSQL_USER")                ?: 'osticket',
-  'dbpass'   => getenv("MYSQL_PASSWORD")            ?: getenv("MYSQL_ENV_MYSQL_PASSWORD"),
+  'prefix'          => getenv("MYSQL_PREFIX")      ?: 'ost_',
+  'dbhost'          => getenv("MYSQL_HOST"),
+  'dbname'          => getenv("MYSQL_DATABASE")    ?: 'osticket',
+  'dbuser'          => getenv("MYSQL_USER")        ?: 'osticket',
+  'dbpass'          => getenv("MYSQL_PASSWORD")    ?: getenv("MYSQL_ENV_MYSQL_PASSWORD"),
+       
+  'timezone'        => getenv("TZ")                ?: "UTC",
 
-  'timezone' => getenv("TZ")                        ?: "UTC",
-
-  'smtp_hostname'   => getenv("SMTP_HOSTNAME")      ?: 'localhost',
-  'smtp_port'       => getenv("SMTP_PORT")          ?: 25,
+  'smtp_hostname'   => getenv("SMTP_HOSTNAME")     ?: 'localhost',
+  'smtp_port'       => getenv("SMTP_PORT")         ?: 25,
   'smtp_from'       => getenv("SMTP_FROM"),
   'smtp_tls'        => getenv("SMTP_TLS"),
-  'smtp_tls_certs'  => getenv("SMTP_TLS_CERTS")     ?: '/etc/ssl/certs/ca-certificates.crt',
+  'smtp_tls_certs'  => getenv("SMTP_TLS_CERTS")    ?: '/etc/ssl/certs/ca-certificates.crt',
   'smtp_user'       => getenv("SMTP_USER"),
-  'smtp_password'       => getenv("SMTP_PASSWORD"),
+  'smtp_password'   => getenv("SMTP_PASSWORD"),
 
   'siri'            => getenv("INSTALL_SECRET"),
   'config'          => '/config/ost-config.php'

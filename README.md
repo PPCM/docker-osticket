@@ -38,7 +38,7 @@ Starting a `osTicket` instance is simple
 ```console
 $ docker network create some-network 
 $ docker run -d --name some-mariadb -p 3306:3306 --network some-network -e MARIADB_USER=osticket-user -e MARIADB_PASSWORD=osticket-password -e MARIADB_RANDOM_ROOT_PASSWORD=1 -e MARIADB_DATABASE=osticket -v mysql-dir:/var/lib/mysql mariadb:latest
-$ docker run -d --name some-osticket-server -p 8089:80 --network some-network -e MYSQL_HOST=some-mariadb -e MYSQL_PORT=3306 -e MYSQL_USER=osticket-user -e MYSQL_PASSWORD=osticket-password -e MYSQL_DATABASE=osticket -e LANG=fr_FR -e TZ="Europe/Paris" -v config:/config -v data:/data ppcm/osticket-server:latest
+$ docker run -d --name some-osticket-server -p 8089:80 --network some-network -e MYSQL_HOST=some-mariadb -e MYSQL_PORT=3306 -e MYSQL_USER=osticket-user -e MYSQL_PASSWORD=osticket-password -e MYSQL_DATABASE=osticket -e INSTALL_LANG_ID=fr -e TZ="Europe/Paris" -v config:/config -v data:/data ppcm/osticket-server:latest
 $ docker run -d --name some-osticket-cron --network some-network -e CRON_SCHEDULE="*/2 * * * *" -e TZ="Europe/Paris" -v config:/config -v data:/data ppcm/osticket-cron:latest
 ```
 ### Login to osTicket
@@ -76,13 +76,13 @@ For plugins variables, any content, except 0, will install, update and activate 
 | MYSQL_PASSWORD                    | X       | X             |                    | osticket               | MySQL or MariaDB password for osTicket user                                        |
 | MYSQL_DATABASE                    | X       | X             |                    | osticket               | MySQL or MariaDB database name for osTicket                                        |
 | MYSQL_PREFIX                      |         | X             |                    | ost_                   | MySQL Table Prefix                                                                 |
-| LANG                              |         | X             |                    | en-us                  | Default language                                                                   |
 | TZ                                |         | X             | X                  | UTC                    | Timezone for the web server and for osTicket                                       |
 | INSTALL_NAME                      |         | X             |                    | My Helpdesk            | Helpdesk Name                                                                      |
 | INSTALL_EMAIL                     |         | X             |                    | helpdesk@example.com   | Default Email                                                                      |
 | INSTALL_URL                       |         | X             |                    | http://localhost:8080/ | Helpdesk URL                                                                       |
 | INSTALL_LANG_ID                   |         | X             |                    | en_US                  | Primary Language                                                                   |
 | INSTALL_SECRET                    |         | X             |                    |                        | Secret string value for osTicket installation (see below)                          |
+| CRON_SCHEDULE                     |         |               | X                  | */2 * * * *            | Schedule in CRON format - [cron.guru](https://crontab.guru/) can help you          |
 | SMTP_HOSTNAME                     |         | X             |                    | localhost              | The host name (or IP address) of the SMTP server to send all outgoing mail through |
 | SMTP_PORT                         |         | X             |                    | 25                     | The TCP port to connect to on the server. Usually one of 25, 465 or 587.           |
 | SMTP_FROM                         |         | X             |                    |                        | The envelope from address to use when sending email (note that is not the same as the From: header). This must be provided for sending mail to function. However, if not specified, this will default to the value of `SMTP_USER` if this is provided. |
