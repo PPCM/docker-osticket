@@ -7,10 +7,6 @@ then
 	echo 'MYSQL_HOST must be set'
 	exit 1
 fi
-if [ -z "${LANG}" ]
-then
-    LANG='fr_FR'
-fi
 
 # Config system
 ./start_osticket-config.sh

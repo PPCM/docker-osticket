@@ -15,6 +15,11 @@ FROM ppcm/osticket-server
 
 ENV NODE_ENV=production
 
+# Remove unused packages
+RUN apk --no-cache upgrade \
+    && apk del --no-cache \
+		          apache2 php82-apache2
+
 # osTicket installation script
 COPY root /
 
