@@ -2,7 +2,7 @@
 
 ## Supported tags
 
-- 1, 1.18, 1.18.1, 1.18.1-1, latest
+- 1, 1.18, 1.18.1, 1.18.1-2, latest
 
 ## Quick reference
 
