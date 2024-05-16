@@ -37,7 +37,7 @@ RUN apk --no-cache upgrade \
     && apk add --no-cache \
 							mariadb-client \
 		          apache2 php82-apache2 php82 \
-						  php82-curl php82-gd php82-mbstring php82-mysqli php82-session php82-pecl-apcu php82-imap php82-cgi \
+						  php82-ctype php82-curl php82-gd php82-mbstring php82-mysqli php82-session php82-pecl-apcu php82-imap php82-cgi \
 							php82-simplexml php82-xml php82-xmlreader php82-xmlwriter php82-intl php82-dom php82-soap php82-fileinfo \
 						  php82-ldap php82-phar php82-zip php82-bz2 php82-opcache php82-pear php82-iconv php82-pdo php82-sockets \
 						  wget unzip inotify-tools tzdata
