@@ -1,5 +1,7 @@
 # osTicket Docker Container
 
+> This project is no longer maintained. We recommend using an alternative, or forking this repository if necessary.
+
 ## Supported tags
 
 - 1, 1.18, 1.18.1, 1.18.1-4, latest
